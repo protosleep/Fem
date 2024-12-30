@@ -162,6 +162,12 @@ void FemAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mi
 
 }
 
+
+void FemAudioProcessor::setOutputGain(double val)
+{
+    mOutputGain.setGainLinear(static_cast<float>(val));
+}
+
 //==============================================================================
 bool FemAudioProcessor::hasEditor() const
 {

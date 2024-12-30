@@ -53,6 +53,9 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+
+    void setOutputGain(double val);
+
 private:
     juce::dsp::Oscillator<float> mSinOsc{ [](float x) { return std::sin(x); } };
     juce::dsp::Oscillator<float> mSawOsc{ [](float x) { return x / juce::MathConstants<float>::pi; } };

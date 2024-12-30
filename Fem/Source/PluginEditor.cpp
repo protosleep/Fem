@@ -13,8 +13,14 @@
 FemAudioProcessorEditor::FemAudioProcessorEditor (FemAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
+    addAndMakeVisible(mOutputGainKnob);
+    mOutputGainKnob.setup();
+    mOutputGainKnob.setRange(0.0, 1.0);
+        ;    mOutputGainKnob.OnValueChanged = [&](double val)
+    {
+        audioProcessor.setOutputGain(val);
+    };
+
     setSize (400, 300);
 }
 
@@ -35,6 +41,5 @@ void FemAudioProcessorEditor::paint (juce::Graphics& g)
 
 void FemAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    mOutputGainKnob.setBounds(10, 10, 120, 120);
 }
