@@ -54,6 +54,11 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    juce::dsp::Oscillator<float> mSinOsc{ [](float x) { return std::sin(x); } };
+    juce::dsp::Oscillator<float> mSawOsc{ [](float x) { return x / juce::MathConstants<float>::pi; } };
+    juce::dsp::Oscillator<float> mSquOsc{ [](float x) { return x  < 0.0F ? -1.0f : 1.0f; } };
+    juce::dsp::Gain<float> mOutputGain;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FemAudioProcessor)
 };
