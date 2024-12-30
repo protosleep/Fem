@@ -4,6 +4,11 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="CPMNyA" name="Fem">
     <GROUP id="{39BBA3B8-F5BC-F42B-BF67-009854ACED81}" name="Source">
+      <GROUP id="{C642EC12-F1AA-802C-B4D1-54E740F176B5}" name="Engine">
+        <FILE id="xZAnoj" name="SynthSound.h" compile="0" resource="0" file="Source/Engine/SynthSound.h"/>
+        <FILE id="qUasUw" name="SynthVoice.cpp" compile="1" resource="0" file="Source/Engine/SynthVoice.cpp"/>
+        <FILE id="bmIBbT" name="SynthVoice.h" compile="0" resource="0" file="Source/Engine/SynthVoice.h"/>
+      </GROUP>
       <GROUP id="{D2927CCC-8996-DE57-9824-95D8CC8361DA}" name="UI">
         <FILE id="TI3nG2" name="Knob.cpp" compile="1" resource="0" file="Source/UI/Knob.cpp"/>
         <FILE id="VqVoUA" name="Knob.h" compile="0" resource="0" file="Source/UI/Knob.h"/>

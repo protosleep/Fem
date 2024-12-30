@@ -22,6 +22,8 @@ FemAudioProcessor::FemAudioProcessor()
                        )
 #endif
 {
+    mSynth.addSound(new Engine::SynthSound());
+    mSynth.addVoice(new Engine::SynthVoice());
 }
 
 FemAudioProcessor::~FemAudioProcessor()
@@ -97,18 +99,19 @@ void FemAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     spec.maximumBlockSize = samplesPerBlock;
     spec.sampleRate = sampleRate;
     spec.numChannels = getTotalNumOutputChannels();
-    mSinOsc.prepare(spec);
-    mSquOsc.prepare(spec);
-    mSawOsc.prepare(spec);
-    mSinOsc.setFrequency(440.0f);
-    mSquOsc.setFrequency(440.0f);
-    mSawOsc.setFrequency(440.0f);
+
+    for (int i = 0; i < mSynth.getNumVoices(); ++i)
+    {
+        if (auto voice = dynamic_cast<Engine::SynthVoice*>(mSynth.getVoice(i)))
+        {
+            voice->prepareToPlay(sampleRate, samplesPerBlock, spec.numChannels);
+        }
+    }
+
+    mSynth.setCurrentPlaybackSampleRate(sampleRate);
 
     mOutputGain.prepare(spec);
     mOutputGain.setGainLinear(0.4f);
-
-    
-    
 }
 
 void FemAudioProcessor::releaseResources()
@@ -145,7 +148,7 @@ bool FemAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) cons
 
 void FemAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    juce::ScopedNoDenormals noDenormals;
+    //juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
@@ -153,11 +156,20 @@ void FemAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mi
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    juce::dsp::AudioBlock<float> audioBlock(buffer);
-    mSquOsc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-    //mSawOsc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-    //mSinOsc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 
+
+    for (int i = 0; i < mSynth.getNumVoices(); ++i)
+    {
+        if (auto voice = dynamic_cast<Engine::SynthVoice*>(mSynth.getVoice(i)))
+        {
+            //TODO
+            //voice->SetSetting(...) //based on params from editor
+        }
+    }
+
+    mSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+
+    juce::dsp::AudioBlock<float> audioBlock(buffer);
     mOutputGain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 
 }
